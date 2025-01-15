@@ -1,4 +1,4 @@
-module Data.PlaceCal.Api exposing (fetchAndCachePlaceCalData)
+module Data.PlaceCal.Api exposing (fetchAndCachePlaceCalData, fetchSinglePlaceCalData)
 
 import BackendTask
 import BackendTask.Custom
@@ -20,3 +20,19 @@ fetchAndCachePlaceCalData collection query =
             , ( "query", query )
             ]
         )
+    >> BackendTask.quiet
+
+
+fetchSinglePlaceCalData :
+    String
+    -> Json.Encode.Value
+    -> (Json.Decode.Decoder a -> BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } a)
+fetchSinglePlaceCalData entityId query =
+    BackendTask.Custom.run "fetchSinglePlaceCalData"
+        (Json.Encode.object
+            [ ( "entityId", Json.Encode.string entityId )
+            , ( "url", Json.Encode.string Constants.placecalApi )
+            , ( "query", query )
+            ]
+        )
+    >> BackendTask.quiet

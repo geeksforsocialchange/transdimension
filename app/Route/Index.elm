@@ -9,10 +9,14 @@ module Route.Index exposing (Model, Msg, RouteParams, route, Data, ActionData)
 import BackendTask
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
+import Data.PlaceCal.Articles
+import Data.PlaceCal.Events
+import Data.PlaceCal.Partners
 import Effect
 import FatalError
 import Head
 import Html.Styled
+import Messages exposing (Msg(..))
 import PagesMsg
 import RouteBuilder
 import Shared
@@ -23,7 +27,6 @@ import Theme.RegionSelector exposing (Msg(..))
 import Time
 import UrlPath
 import View
-import Messages exposing (Msg(..))
 
 
 type alias Model =
@@ -87,7 +90,8 @@ route =
 
 
 type alias Data =
-    {}
+    { events : List Data.PlaceCal.Events.Event
+    }
 
 
 type alias ActionData =
@@ -96,7 +100,9 @@ type alias ActionData =
 
 data : BackendTask.BackendTask FatalError.FatalError Data
 data =
-    BackendTask.succeed {}
+    BackendTask.map Data
+        (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
+        |> BackendTask.allowFatal
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
@@ -116,7 +122,18 @@ view :
 view app _ model =
     { title = t SiteTitle
     , body =
-        [ Theme.Page.Index.view app.sharedData model
+        let
+            sharedData =
+                app.sharedData
+
+            sharedDataWithEvents =
+                { events = app.data.events
+                , partners = sharedData.partners
+                , articles = sharedData.articles
+                , time = sharedData.time
+                }
+        in
+        [ Theme.Page.Index.view sharedDataWithEvents model
             |> Html.Styled.map PagesMsg.fromMsg
         ]
     }

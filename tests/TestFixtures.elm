@@ -24,7 +24,7 @@ sharedModelInit =
     }
 
 
-sharedDataFixture : Shared.Data
+sharedDataFixture : { articles : List Article, partners : List Partner, events : List Event, time : Time.Posix }
 sharedDataFixture =
     { articles = news
     , partners = partners

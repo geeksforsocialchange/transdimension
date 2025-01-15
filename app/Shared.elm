@@ -44,7 +44,6 @@ template =
 type alias Data =
     { articles : List Data.PlaceCal.Articles.Article
     , partners : List Data.PlaceCal.Partners.Partner
-    , events : List Data.PlaceCal.Events.Event
     , time : Time.Posix
     }
 
@@ -123,10 +122,10 @@ update msg model =
         -- Shared
         SharedMsg _ ->
             ( model, Effect.none )
-        
+
         -- Update region filter
         SetRegion tagId ->
-            ( { model | filterParam = Just (tagId) }, Effect.none )
+            ( { model | filterParam = Just tagId }, Effect.none )
 
 
 subscriptions : UrlPath -> Model -> Sub Msg
@@ -136,10 +135,9 @@ subscriptions _ _ =
 
 data : BackendTask FatalError Data
 data =
-    BackendTask.map4 Data
+    BackendTask.map3 Data
         (BackendTask.map (\articlesData -> articlesData.allArticles) Data.PlaceCal.Articles.articlesData)
         (BackendTask.map (\partnersData -> partnersData.allPartners) Data.PlaceCal.Partners.partnersData)
-        (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
         -- Consider using Pages.builtAt or Server.Request.requestTime
         BackendTask.Time.now
         |> BackendTask.allowFatal

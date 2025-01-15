@@ -29,6 +29,7 @@ import Theme.Paginator exposing (Msg(..))
 import Time
 import UrlPath
 import View
+import Data.PlaceCal.Events
 
 
 type alias Model =
@@ -183,7 +184,9 @@ subscriptions _ _ _ _ =
 
 
 type alias Data =
-    ()
+    {
+        events : List Data.PlaceCal.Events.Event
+    }
 
 
 type alias ActionData =
@@ -192,7 +195,9 @@ type alias ActionData =
 
 data : RouteParams -> BackendTask.BackendTask FatalError.FatalError Data
 data _ =
-    BackendTask.succeed ()
+    BackendTask.map Data
+        (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
+    |> BackendTask.allowFatal
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
@@ -229,7 +234,7 @@ view app _ model =
                 Just
                     (Theme.Page.Partner.viewInfo model
                         { partner = aPartner
-                        , events = eventsFromPartnerId aPartner.id app.sharedData.events
+                        , events = eventsFromPartnerId aPartner.id app.data.events
                         }
                     )
             , outerContent = Just (Theme.Global.viewBackButton (Helpers.TransRoutes.toAbsoluteUrl Partners) (t BackToPartnersLinkText))

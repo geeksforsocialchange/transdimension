@@ -5,10 +5,10 @@ import Copy.Text exposing (t)
 import Css exposing (Style, absolute, after, auto, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, batch, before, block, borderRadius, bottom, calc, center, color, display, em, fontSize, fontStyle, fontWeight, height, important, inlineBlock, int, italic, lineHeight, margin2, marginBottom, marginLeft, marginRight, marginTop, maxWidth, minus, noRepeat, none, padding2, padding4, paddingBottom, paddingLeft, paddingRight, paddingTop, pct, position, property, px, relative, rem, textAlign, top, url, vw, width, zIndex)
 import Data.PlaceCal.Articles
 import Data.PlaceCal.Events
+import Data.PlaceCal.Partners
 import Helpers.TransRoutes
 import Html.Styled exposing (Html, a, div, h1, h2, img, p, section, text)
 import Html.Styled.Attributes exposing (alt, css, href, src)
-import Shared
 import Theme.Global
 import Theme.Page.Events
 import Theme.Page.News
@@ -18,7 +18,11 @@ import Time
 
 
 view :
-    Shared.Data
+    { events : List Data.PlaceCal.Events.Event
+    , partners : List Data.PlaceCal.Partners.Partner
+    , articles : List Data.PlaceCal.Articles.Article
+    , time : Time.Posix
+    }
     ->
         { localModel
             | filterByRegion : Int
