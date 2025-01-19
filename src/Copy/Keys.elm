@@ -74,6 +74,7 @@ type Key
     | EventsFilterLabelTomorrow
     | EventsFilterLabelAllPast
     | EventsFilterLabelAllFuture
+    | GoToNextEvent
       --- Event Page
     | EventTitle Prefix String
     | EventMetaDescription String

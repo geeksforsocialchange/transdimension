@@ -15,6 +15,8 @@ import Theme.Page.News
 import Theme.Paginator
 import Theme.RegionSelector
 import Time
+import Theme.Page.Events exposing (fromRegionSelectorMsg)
+import Theme.Page.Events exposing (Msg)
 
 
 view :
@@ -24,7 +26,7 @@ view :
             | filterByRegion : Int
             , nowTime : Time.Posix
         }
-    -> Html Theme.RegionSelector.Msg
+    -> Html Theme.Page.Events.Msg
 view sharedData localModel =
     div [ css [ pageWrapperStyle ] ]
         [ viewIntro (t IndexIntroTitle) (t IndexIntroMessage) (t IndexIntroButtonText)
@@ -56,11 +58,11 @@ viewIntro introTitle introMsg eventButtonText =
         ]
 
 
-viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Theme.RegionSelector.Msg
+viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Msg
 viewFeatured fromTime eventList regionId =
     section [ css [ sectionStyle, Theme.Global.darkBlueBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ Theme.Global.smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
-        , Theme.RegionSelector.viewRegionSelector { filterBy = regionId }
+        , Theme.RegionSelector.viewRegionSelector { filterBy = regionId } |> Html.Styled.map fromRegionSelectorMsg
         , Theme.Page.Events.viewEventsList { filterByDate = Theme.Paginator.Future, filterByRegion = regionId, nowTime = fromTime } eventList (Just 8)
         , p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
             [ a

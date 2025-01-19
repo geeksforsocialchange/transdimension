@@ -140,6 +140,9 @@ update app _ msg model =
                     , Just (SetRegion tagId)
                     )
 
+        Theme.Page.Events.ClickedGoToNextEvent nextEventTime ->
+            ( { model | filterByDate = Theme.Paginator.Day nextEventTime }, Effect.none, Nothing )
+
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
 subscriptions _ _ _ _ =

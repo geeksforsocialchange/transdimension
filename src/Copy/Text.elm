@@ -187,7 +187,7 @@ t key =
             "There are no upcoming events. Check back for updates!"
 
         EventsEmptyText ->
-            "There are no upcoming events on this date. Check back for updates!"
+            "There are no upcoming events on this date."
 
         PreviousEventsEmptyTextAll ->
             "There have been no events in the recent past."
@@ -204,6 +204,9 @@ t key =
         EventsFilterLabelAllFuture ->
             "Future events"
 
+        GoToNextEvent ->
+            "Go to next event"
+        
         --- Event Page
         EventTitle prefix eventName ->
             case prefix of

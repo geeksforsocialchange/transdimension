@@ -175,6 +175,9 @@ update app _ msg model =
             -- We do not include Region Selector on individual Partner pages
             -- But may  in future if some partners have events in multiple regions
             ( model, Effect.none )
+        
+        Theme.Page.Events.ClickedGoToNextEvent nextEventTime ->
+            ( { model | filterByDate = Theme.Paginator.Day nextEventTime }, Effect.none )
 
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
